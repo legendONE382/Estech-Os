@@ -1,0 +1,50 @@
+{% extends "core/base.html" %}
+
+{% block title %}Create your Estech OS workspace{% endblock %}
+
+{% block content %}
+<main class="flex min-h-screen items-center justify-center px-6 py-12">
+  <section class="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl shadow-slate-200 ring-1 ring-slate-200 md:grid-cols-2">
+    <div class="bg-slate-950 p-10 text-white">
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Estech OS</p>
+      <h1 class="mt-8 text-4xl font-semibold tracking-tight">Turn repetitive business work into automated workflows.</h1>
+      <p class="mt-5 text-base leading-7 text-slate-300">Create a secure workspace for your organization. We'll set you up as the admin so your team, tasks, leads, and future automations stay tenant-safe from day one.</p>
+      <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <p class="text-sm font-medium text-slate-200">Phase 1 foundation</p>
+        <p class="mt-2 text-sm leading-6 text-slate-400">Authentication, onboarding, and organization membership built for the full operations engine.</p>
+      </div>
+    </div>
+
+    <div class="p-10">
+      <h2 class="text-2xl font-semibold text-slate-950">Create your workspace</h2>
+      <p class="mt-2 text-sm text-slate-500">Start with your admin account and organization.</p>
+
+      <form method="post" class="mt-8 space-y-5">
+        {% csrf_token %}
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-700">{{ field.label }}</label>
+            <input
+              type="{{ field.field.widget.input_type|default:'text' }}"
+              name="{{ field.html_name }}"
+              id="{{ field.id_for_label }}"
+              value="{{ field.value|default_if_none:'' }}"
+              class="mt-2 block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-950 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+              {% if field.field.required %}required{% endif %}
+            >
+            {% for error in field.errors %}
+              <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+          <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <button type="submit" class="w-full rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-200 transition hover:bg-slate-800">Create workspace</button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-slate-500">Already have an account? <a href="{% url 'login' %}" class="font-semibold text-slate-950 hover:text-cyan-700">Sign in</a></p>
+    </div>
+  </section>
+</main>
+{% endblock %}
