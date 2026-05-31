@@ -1,0 +1,16 @@
+<form id="lead-create-form" method="post" action="{% url 'leads:create' %}" hx-post="{% url 'leads:create' %}" hx-target="#lead-list" hx-swap="afterbegin" class="space-y-5">
+  {% csrf_token %}
+  <div class="grid gap-5 lg:grid-cols-2">
+    {% for field in form %}
+      <div class="{% if field.name == 'notes' %}lg:col-span-2{% endif %}">
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-300">{{ field.label }}</label>
+        {{ field }}
+        {% for error in field.errors %}<p class="mt-2 text-sm text-red-300">{{ error }}</p>{% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if form.non_field_errors %}<div class="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="flex justify-end">
+    <button type="submit" class="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_0_25px_rgba(52,211,153,0.20)] transition-all duration-300 hover:bg-emerald-300">Create lead</button>
+  </div>
+</form>

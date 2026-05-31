@@ -1,0 +1,25 @@
+<article id="lead-{{ lead.id }}" class="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-5 backdrop-blur-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:border-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+  <div class="flex items-start justify-between gap-4">
+    <div class="min-w-0">
+      <p class="truncate text-lg font-semibold text-white">{{ lead.name }}</p>
+      <p class="mt-1 truncate text-sm text-slate-400">{{ lead.company_name }}</p>
+    </div>
+    {% include "leads/partials/status_badge.html" with status=lead.status %}
+  </div>
+  <div class="mt-4 space-y-2 text-sm text-slate-400">
+    <p><span class="text-slate-500">Email:</span> <a href="mailto:{{ lead.email }}" class="text-cyan-200 hover:text-cyan-100">{{ lead.email }}</a></p>
+    <p><span class="text-slate-500">Phone:</span> {{ lead.phone }}</p>
+  </div>
+  <p class="mt-4 line-clamp-3 text-sm leading-6 text-slate-500">{{ lead.notes }}</p>
+  <form method="post" action="{% url 'leads:update_status' lead.id %}" class="mt-5" hx-post="{% url 'leads:update_status' lead.id %}" hx-target="#lead-{{ lead.id }}" hx-swap="outerHTML">
+    {% csrf_token %}
+    <label for="lead-status-{{ lead.id }}" class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Pipeline status</label>
+    <select id="lead-status-{{ lead.id }}" name="status" hx-post="{% url 'leads:update_status' lead.id %}" hx-target="#lead-{{ lead.id }}" hx-swap="outerHTML" hx-include="closest form" class="mt-2 block w-full rounded-2xl border border-slate-700/80 bg-slate-950/80 px-3 py-2 text-xs font-semibold text-slate-200 outline-none transition focus:border-cyan-400/60 focus:ring-4 focus:ring-cyan-400/10">
+      <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+      <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+      <option value="qualified" {% if lead.status == 'qualified' %}selected{% endif %}>Qualified</option>
+      <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>Converted</option>
+      <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+    </select>
+  </form>
+</article>

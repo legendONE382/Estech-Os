@@ -1,0 +1,71 @@
+<article
+  id="task-{{ task.id }}"
+  class="group rounded-3xl border border-slate-800/80 bg-slate-900/60 p-5 backdrop-blur-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)] {% if task.status == 'completed' %}opacity-80{% endif %}"
+>
+  <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+    <div class="flex min-w-0 gap-4">
+      <input
+        type="checkbox"
+        aria-label="Toggle completion for {{ task.title }}"
+        class="mt-1 h-5 w-5 rounded border-slate-600 bg-slate-950 text-emerald-400 focus:ring-emerald-400/30"
+        {% if task.status == 'completed' %}checked{% endif %}
+        hx-post="{% url 'tasks:toggle_complete' task.id %}"
+        hx-target="#task-{{ task.id }}"
+        hx-swap="outerHTML"
+      >
+      <div class="min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <h3 class="text-lg font-semibold text-white {% if task.status == 'completed' %}text-slate-400 line-through decoration-emerald-300/60{% endif %}">{{ task.title }}</h3>
+          {% if task.priority == 'high' %}
+            <span class="rounded-full border border-red-400/30 bg-red-400/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-red-200">High</span>
+          {% elif task.priority == 'medium' %}
+            <span class="rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-amber-200">Medium</span>
+          {% else %}
+            <span class="rounded-full border border-slate-600/70 bg-slate-800/60 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-300">Low</span>
+          {% endif %}
+        </div>
+        <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">{{ task.description }}</p>
+        <dl class="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
+          <div class="rounded-full border border-slate-800 bg-slate-950/60 px-3 py-1.5">Due <time datetime="{{ task.due_date|date:'Y-m-d' }}" class="text-slate-300">{{ task.due_date|date:"M j, Y" }}</time></div>
+          <div class="rounded-full border border-slate-800 bg-slate-950/60 px-3 py-1.5">Assigned to <span class="text-slate-300">{{ task.assigned_to.get_full_name|default:task.assigned_to.username }}</span></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="flex shrink-0 flex-col gap-3 sm:flex-row xl:flex-col xl:items-end">
+      {% if task.status == 'completed' %}
+        <span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-emerald-300 shadow-[0_0_16px_rgba(52,211,153,0.10)]">Completed</span>
+      {% elif task.status == 'in_progress' %}
+        <span class="rounded-full border border-indigo-400/40 bg-indigo-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-indigo-200 shadow-[0_0_16px_rgba(99,102,241,0.15)]">In Progress</span>
+      {% elif task.status == 'pending_approval' %}
+        <span class="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-200">Pending Approval</span>
+      {% else %}
+        <span class="rounded-full border border-slate-600/70 bg-slate-800/60 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-slate-300">To Do</span>
+      {% endif %}
+
+      <form
+        method="post"
+        action="{% url 'tasks:update_status' task.id %}"
+        hx-post="{% url 'tasks:update_status' task.id %}"
+        hx-target="#task-{{ task.id }}"
+        hx-swap="outerHTML"
+      >
+        {% csrf_token %}
+        <label for="task-status-{{ task.id }}" class="sr-only">Update task status</label>
+        <select
+          id="task-status-{{ task.id }}"
+          name="status"
+          class="rounded-2xl border border-slate-700/80 bg-slate-950/80 px-3 py-2 text-xs font-semibold text-slate-200 outline-none transition focus:border-cyan-400/60 focus:ring-4 focus:ring-cyan-400/10"
+          hx-post="{% url 'tasks:update_status' task.id %}"
+          hx-target="#task-{{ task.id }}"
+          hx-swap="outerHTML"
+        >
+          <option value="todo" {% if task.status == 'todo' %}selected{% endif %}>To Do</option>
+          <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+          <option value="pending_approval" {% if task.status == 'pending_approval' %}selected{% endif %}>Pending Approval</option>
+          <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+      </form>
+    </div>
+  </div>
+</article>
