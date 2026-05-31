@@ -1,0 +1,26 @@
+<a
+  href="{{ href }}"
+  hx-get="{{ href }}"
+  hx-target="#main-content"
+  hx-swap="innerHTML"
+  hx-push-url="true"
+  class="group flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-300 ease-in-out hover:border-emerald-500/40 hover:bg-slate-900/70 hover:text-emerald-100 hover:shadow-[0_0_15px_rgba(16,185,129,0.10)]"
+  :class="activePath === '{{ match }}' || ('{{ match }}' !== '/' && activePath.startsWith('{{ match }}')) ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.14)]' : 'border-transparent text-slate-400'"
+>
+  <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800/80 bg-slate-950/60 text-slate-400 transition-colors duration-300 group-hover:text-emerald-300">
+    {% if icon == "grid" %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>
+    {% elif icon == "check" %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 13 4 4L19 7"/><path d="M4 5h9"/><path d="M4 19h16"/></svg>
+    {% elif icon == "users" %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    {% elif icon == "spark" %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h8l-1 8 11-13h-8z"/></svg>
+    {% elif icon == "chart" %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>
+    {% else %}
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 .6 1.65 1.65 0 0 0-.4 1.08V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8.6 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-.6-1 1.65 1.65 0 0 0-1.08-.4H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 3.9l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-.6 1.65 1.65 0 0 0 .4-1.08V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15.4 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.36.15.69.35 1 .6.31.25.66.4 1.08.4H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    {% endif %}
+  </span>
+  {{ label }}
+</a>
