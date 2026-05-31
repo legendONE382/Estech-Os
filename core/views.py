@@ -6,6 +6,7 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db import DatabaseError
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -18,17 +19,31 @@ def register(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
-    if request.method == "POST":
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Welcome to Estech OS. Your workspace is ready.")
-            return redirect("dashboard")
-    else:
-        form = RegistrationForm()
+    form = RegistrationForm(request.POST or None)
+    registration_error = None
 
-    return render(request, "core/registration/register.html", {"form": form})
+    if request.method == "POST":
+        try:
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                messages.success(request, "Welcome to Estech OS. Your workspace is ready.")
+                return redirect("dashboard")
+        except DatabaseError:
+            registration_error = (
+                "We could not complete registration because the database is temporarily unavailable. "
+                "Please try again in a few moments."
+            )
+            form.add_error(None, registration_error)
+
+    return render(
+        request,
+        "core/registration/register.html",
+        {
+            "form": form,
+            "registration_error": registration_error,
+        },
+    )
 
 
 def _is_htmx(request) -> bool:
