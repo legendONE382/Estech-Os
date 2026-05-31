@@ -55,3 +55,26 @@ class RegistrationForm(UserCreationForm):
             )
 
         return user
+
+
+class OrganizationSettingsForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=255,
+        label="Organization name",
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full rounded-3xl border border-slate-700/80 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-emerald-400/60 focus:ring-4 focus:ring-emerald-400/10",
+                "placeholder": "Enter your organization name",
+            }
+        ),
+    )
+
+    class Meta:
+        model = Organization
+        fields = ("name",)
+
+    def clean_name(self) -> str:
+        name = self.cleaned_data["name"].strip()
+        if not name:
+            raise forms.ValidationError("Organization name cannot be blank.")
+        return name

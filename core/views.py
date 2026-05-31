@@ -10,7 +10,7 @@ from django.db.models import Count, Q
 from django.shortcuts import redirect, render
 from django.utils import timezone
 
-from .forms import RegistrationForm
+from .forms import OrganizationSettingsForm, RegistrationForm
 from .models import Lead, Organization, SystemActivityLog, Task, UserProfile, WorkflowRule
 
 
@@ -277,15 +277,25 @@ def settings(request):
         return _render_session_error(request)
 
     organization = Organization.objects.select_related("owner").get(pk=profile.organization_id)
+    if request.method == "POST":
+        form = OrganizationSettingsForm(request.POST, instance=organization)
+        if form.is_valid():
+            form.save()
+            SystemActivityLog.objects.create(
+                organization=organization,
+                actor=request.user,
+                description=f"Organization name updated to '{organization.name}'.",
+            )
+            messages.success(request, "Organization profile updated successfully.")
+            return redirect("settings")
+    else:
+        form = OrganizationSettingsForm(instance=organization)
+
     context = {
         "shell_organization": organization,
         "eyebrow": "Workspace settings",
         "title": "Organization profile",
         "description": "Core tenant identity and access context for this Estech OS workspace.",
-        "cards": [
-            _module_card("Organization", organization.name, "The legal or operating name for this tenant."),
-            _module_card("Owner", organization.owner.username, "The user account that owns this workspace."),
-            _module_card("Your role", profile.role, "Your current access level inside this organization."),
-        ],
+        "form": form,
     }
-    return _render_workspace(request, "workspace/module_page.html", "workspace/module.html", context)
+    return render(request, "core/settings.html", context)

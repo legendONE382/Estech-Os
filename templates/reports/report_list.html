@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Reports · Estech OS{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-7xl space-y-8">
+  <div class="rounded-[2rem] border border-slate-800/80 bg-slate-900/60 p-8 backdrop-blur-md">
+    <p class="text-sm font-semibold uppercase tracking-[0.35em] text-emerald-300">{{ eyebrow }}</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-tight text-white md:text-5xl">{{ title }}</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-400">{{ description }}</p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-3">
+    {% for card in cards %}
+      <article class="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+        <p class="text-sm font-medium text-slate-400">{{ card.label }}</p>
+        <p class="mt-4 text-3xl font-semibold text-white">{{ card.value }}</p>
+        <p class="mt-4 text-sm leading-6 text-slate-500">{{ card.description }}</p>
+      </article>
+    {% endfor %}
+  </div>
+
+  <div class="space-y-6">
+    <div class="flex flex-col gap-4 rounded-[2rem] border border-emerald-400/20 bg-slate-900/40 p-6 shadow-[0_0_25px_rgba(16,185,129,0.12)] backdrop-blur-xl md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">Report intelligence</p>
+        <p class="mt-2 text-sm text-slate-400">Refresh the tenant-level summary on demand to keep the report aligned with the latest lead and task activity.</p>
+      </div>
+      <button
+        hx-get="{% url 'reports' %}"
+        hx-target="#reports-panel"
+        hx-swap="innerHTML"
+        class="inline-flex items-center justify-center rounded-3xl border border-emerald-500/30 bg-emerald-400/10 px-5 py-3 text-sm font-semibold text-emerald-200 transition-all duration-300 hover:bg-emerald-400/15 hover:text-white"
+      >
+        Refresh report
+      </button>
+    </div>
+
+    <div id="reports-panel">
+      {% include "reports/report_panel.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}

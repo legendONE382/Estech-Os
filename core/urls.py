@@ -8,7 +8,7 @@ urlpatterns = [
     path("tasks/", include("tasks.urls")),
     path("leads/", include("leads.urls")),
     path("automated-rules/", include("automation.urls")),
-    path("reports/", views.reports, name="reports"),
+    path("reports/", include("reports.urls")),
     path("settings/", views.settings, name="settings"),
     path("register/", views.register, name="register"),
     path(

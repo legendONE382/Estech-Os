@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "tasks",
     "leads",
     "automation",
+    "reports",
 ]
 
 MIDDLEWARE = [
