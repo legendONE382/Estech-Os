@@ -1,11 +1,11 @@
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
-    path("tasks/", views.tasks, name="tasks"),
+    path("tasks/", include("tasks.urls")),
     path("leads/", views.leads, name="leads"),
     path("automated-rules/", views.automated_rules, name="automated_rules"),
     path("reports/", views.reports, name="reports"),
