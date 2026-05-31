@@ -1,0 +1,28 @@
+<form id="rule-create-form" method="post" action="{% url 'automation:create' %}" hx-post="{% url 'automation:create' %}" hx-target="#rule-list" hx-swap="afterbegin" class="space-y-5">
+  {% csrf_token %}
+  <div>
+    <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-slate-300">Rule name</label>
+    {{ form.name }}
+    {% for error in form.name.errors %}<p class="mt-2 text-sm text-red-300">{{ error }}</p>{% endfor %}
+  </div>
+  <div class="grid gap-5 lg:grid-cols-2">
+    <div>
+      <label for="{{ form.trigger.id_for_label }}" class="block text-sm font-medium text-slate-300">IF</label>
+      {{ form.trigger }}
+      {% for error in form.trigger.errors %}<p class="mt-2 text-sm text-red-300">{{ error }}</p>{% endfor %}
+    </div>
+    <div>
+      <label for="{{ form.action.id_for_label }}" class="block text-sm font-medium text-slate-300">THEN</label>
+      {{ form.action }}
+      {% for error in form.action.errors %}<p class="mt-2 text-sm text-red-300">{{ error }}</p>{% endfor %}
+    </div>
+  </div>
+  <label class="flex items-center gap-3 rounded-2xl border border-slate-800/80 bg-slate-950/50 px-4 py-3 text-sm text-slate-300">
+    {{ form.is_active }}
+    <span>Activate this rule immediately</span>
+  </label>
+  {% if form.non_field_errors %}<div class="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="flex justify-end">
+    <button type="submit" class="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_0_25px_rgba(52,211,153,0.20)] transition-all duration-300 hover:bg-emerald-300">Create rule</button>
+  </div>
+</form>

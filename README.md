@@ -30,6 +30,21 @@ Phase 1 initializes the Django foundation, multi-tenant schema, Vercel WSGI depl
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
+├── leads/
+│   ├── __init__.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── automation/
+│   ├── __init__.py
+│   ├── apps.py
+│   ├── engine.py
+│   ├── forms.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
 ├── tasks/
 │   ├── __init__.py
 │   ├── apps.py
@@ -41,6 +56,22 @@ Phase 1 initializes the Django foundation, multi-tenant schema, Vercel WSGI depl
 │   ├── base.html
 │   ├── dashboard/
 │   │   └── index.html
+│   ├── automation/
+│   │   ├── rule_list.html
+│   │   ├── rule_page.html
+│   │   └── partials/
+│   │       ├── rule_card.html
+│   │       ├── rule_create_success.html
+│   │       └── rule_form.html
+│   ├── leads/
+│   │   ├── lead_list.html
+│   │   ├── lead_page.html
+│   │   └── partials/
+│   │       ├── lead_card.html
+│   │       ├── lead_create_success.html
+│   │       ├── lead_form.html
+│   │       ├── lead_status_update.html
+│   │       └── status_badge.html
 │   ├── tasks/
 │   │   ├── task_list.html
 │   │   ├── task_page.html
@@ -95,3 +126,12 @@ python manage.py runserver
 - Task creation limits assignees to users in the active organization and injects the organization server-side before saving.
 - HTMX task creation appends the new task card and shows a temporary success toast without reloading the shell.
 - HTMX completion and status changes return only the updated `task_card.html` fragment with `outerHTML` swaps and activity logging.
+
+## Phases 4 and 5 behavior
+
+- The `/leads/` workspace is powered by the dedicated `leads` app and supports HTMX lead creation plus inline pipeline status changes.
+- Every lead query and mutation is scoped to `request.user.profile.organization`; cross-tenant lead updates return a 404.
+- The `/automated-rules/` workspace is powered by the dedicated `automation` app and creates simple active `WorkflowRule` records.
+- `automation.engine.execute_workflows()` runs synchronously inside the request lifecycle for Vercel compatibility.
+- Active `lead_created` rules with the `assign_member` action create a follow-up `Task` assigned to the organization owner/admin and log execution to `SystemActivityLog`.
+- Lead and automation mutations return HTMX fragments with out-of-band toasts and navigation count updates.

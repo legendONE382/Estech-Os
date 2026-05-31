@@ -6,8 +6,8 @@ from . import views
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
     path("tasks/", include("tasks.urls")),
-    path("leads/", views.leads, name="leads"),
-    path("automated-rules/", views.automated_rules, name="automated_rules"),
+    path("leads/", include("leads.urls")),
+    path("automated-rules/", include("automation.urls")),
     path("reports/", views.reports, name="reports"),
     path("settings/", views.settings, name="settings"),
     path("register/", views.register, name="register"),

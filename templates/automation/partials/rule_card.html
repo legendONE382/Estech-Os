@@ -1,0 +1,20 @@
+<article id="rule-{{ rule.id }}" class="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:border-emerald-500/40 hover:shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p class="text-lg font-semibold text-white">{{ rule.name }}</p>
+      <p class="mt-1 text-xs text-slate-500">Visual rule sentence</p>
+    </div>
+    {% if rule.is_active %}
+      <span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-emerald-300">Active</span>
+    {% else %}
+      <span class="rounded-full border border-slate-600/70 bg-slate-800/60 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-slate-300">Paused</span>
+    {% endif %}
+  </div>
+  <div class="mt-6 rounded-2xl border border-slate-800/80 bg-slate-950/50 p-4 text-sm leading-7 text-slate-300">
+    <span class="font-black tracking-[0.2em] text-cyan-300">IF</span>
+    <span class="mx-2 text-white">{% if rule.trigger == 'lead_created' %}When a lead is added{% else %}{{ rule.trigger }}{% endif %}</span>
+    <span class="font-black tracking-[0.2em] text-emerald-300">THEN</span>
+    <span class="ml-2 text-white">{% if rule.action == 'assign_member' %}Assign to team member{% else %}{{ rule.action }}{% endif %}</span>
+  </div>
+  <p class="mt-4 text-sm leading-6 text-slate-500">When this rule runs, Estech OS creates a follow-up task assigned to the organization owner/admin during the same request lifecycle.</p>
+</article>

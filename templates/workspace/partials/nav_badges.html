@@ -1,0 +1,5 @@
+{% if nav_counts %}
+<span id="nav-leads-count" hx-swap-oob="outerHTML" class="rounded-full border border-slate-700/80 bg-slate-950/70 px-2 py-0.5 text-[11px] font-bold text-slate-400">{{ nav_counts.new_leads|default:0 }}</span>
+<span id="nav-rules-count" hx-swap-oob="outerHTML" class="rounded-full border border-slate-700/80 bg-slate-950/70 px-2 py-0.5 text-[11px] font-bold text-slate-400">{{ nav_counts.active_rules|default:0 }}</span>
+<span id="nav-tasks-count" hx-swap-oob="outerHTML" class="rounded-full border border-slate-700/80 bg-slate-950/70 px-2 py-0.5 text-[11px] font-bold text-slate-400">{{ nav_counts.open_tasks|default:0 }}</span>
+{% endif %}
